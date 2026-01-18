@@ -10,7 +10,7 @@ const EntrollmentPage = () => {
     mobile: '',
     qualification: '',
     mode: 'Online',
-    batch: 'January 15, 2025',
+    batch: 'January 25, 2026p',
     city: '',
     queries: ''
   });
