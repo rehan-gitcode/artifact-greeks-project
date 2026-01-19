@@ -2,33 +2,114 @@
 
 import React, { useState } from 'react';
 import { Clock, TrendingUp, Monitor, Calendar, Briefcase, Award, Users, BookOpen, GraduationCap, Star } from 'lucide-react';
-
+import axios from 'axios';
 const EntrollmentPage = () => {
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    mobile: '',
-    qualification: '',
-    mode: 'Online',
-    batch: 'January 25, 2026p',
-    city: '',
-    queries: ''
+    fullName: "",
+    email: "",
+    mobile: "",
+    qualification: "",
+    mode: "Online",
+    batch: "January 25, 2026",
+    city: "",
+    queries: ""
   });
 
+  const[error,setError]=useState('')
+ 
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    // setFormData({ ...formData, [e.target.name]: e.target.value });
+     const { name, value } = e.target;
+  setFormData(prev => ({ ...prev, [name]: value }));
+  // Clear error when user types
+  if (error[name]) {
+    setError(prev => ({ ...prev, [name]: '' }));
+  }
+    
+    
   };
 
-  const handleSubmit = () => {
-    console.log('Form submitted:', formData);
-  };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  // setLoading(true);
+  setError({}); // Clear previous errors
+  
+  try {
+    const response = await axios.post("http://localhost:2000/submit", formData);
+    alert("Form submitted successfully! ✅");
+    setFormData({
+      fullName: "", email: "", mobile: "", qualification: "", 
+      mode: "Online", batch: "", city: "", queries: ""
+    });
+  } catch (err) {
+    console.error('Submission error:', err);
+    
+    if (err.response?.data?.errors) {
+      // Map Mongoose errors to fields
+      const fieldErrors = {};
+      Object.keys(err.response.data.errors).forEach(key => {
+        fieldErrors[key] = err.response.data.errors[key].message;
+      });
+      setError(fieldErrors);
+      alert("Please fix the errors below!");
+    } else {
+      setError({});
+      alert("Server error!");
+    }
+  } 
+  // finally {
+  //   setLoading(false);
+  // }
+};
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   setError('');
+    
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:2000/submit", 
+  //       formData
+  //     );
+      
+  //     alert("Form submitted successfully! ✅");
+  //     console.log('Response:', response.data);
+      
+  //     // Reset form
+  //     setFormData({
+  //      fullName: "",
+  //   email: "",
+  //   mobile: "",
+  //   qualification: "",
+  //   city: "",
+  //   queries: ""
+       
+  //     });
+      
+  //   } catch (err) {
+  //     console.error('Submission error:', err);
+      
+  //     if (err.response?.data?.message) {
+  //       setError(err.response.data.message);
+  //       alert("Error: " + err.response.data.message);    
+  //     } else {
+  //       setError('');
+  //       alert("Server error!");
+  //     }
+     
+  
+  // };
+  //   console.log('Form submitted:', formData);
+  // };
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section with Enrollment */}
       <div className="max-w-7xl mx-auto px-8 py-12">
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Left Side - Course Details */}
+           {/* Course Details  */}
           <div className="bg-white rounded-lg shadow-lg p-8">
             <h1 className="text-4xl font-bold text-gray-800 mb-4">
               Enroll in Full Stack Development Bootcamp
@@ -92,7 +173,7 @@ const EntrollmentPage = () => {
             </div>
           </div>
 
-          {/* Right Side - Enrollment Form */}
+          {/*  Enrollment Form */}
           <div className="bg-white rounded-lg shadow-lg p-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
               Complete Your Enrollment
@@ -111,6 +192,8 @@ const EntrollmentPage = () => {
                   placeholder="Enter your full name"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none"
                 />
+                {error.fullName && ( <span className="block mt-1 text-sm text-red-600">{error.fullName}
+                  </span> )}
               </div>
 
               <div>
@@ -124,7 +207,9 @@ const EntrollmentPage = () => {
                   onChange={handleChange}
                   placeholder="example@gmail.com"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none"
-                />
+                /> 
+                  {error.email && ( <span className="block mt-1 text-sm text-red-600">{error.email}
+                  </span> )}
               </div>
 
               <div>
@@ -139,6 +224,8 @@ const EntrollmentPage = () => {
                   placeholder="+91********"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none"
                 />
+                  {error.mobile && ( <span className="block mt-1 text-sm text-red-600">{error.mobile}
+                  </span> )}
               </div>
 
               <div>
@@ -157,6 +244,8 @@ const EntrollmentPage = () => {
                   <option value="masters">Master's Degree</option>
                   <option value="other">Other</option>
                 </select>
+                 {error.qualification && ( <span className="block mt-1 text-sm text-red-600">{error.qualification}
+                  </span> )}
               </div>
 
               <div>
@@ -203,6 +292,8 @@ const EntrollmentPage = () => {
                   placeholder="Enter your city"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none"
                 />
+                  {error.city && ( <span className="block mt-1 text-sm text-red-600">{error.city}
+                  </span> )}
               </div>
 
               <div>
