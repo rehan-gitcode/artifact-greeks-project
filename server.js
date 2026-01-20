@@ -1,8 +1,8 @@
 const express=require("express")
 const connect=require('./database')
 const user=require("./models")
-const validuser=require("./validation")
-require("dotenv").config
+// const validuser=require("./validation")
+
 
 
 const cors=require("cors")
@@ -10,7 +10,7 @@ const cors=require("cors")
 
 
 const app=express()
-
+ 
 app.use(express.json());
 app.use(cors());
 
@@ -106,9 +106,9 @@ async function initializeConnection(){
          console.log("connect to db")
        
 
-         app.listen(process.env.PORT, () => {
+         app.listen(2000, () => {
             console.log("listing on server 2000")
-        })
+        }) 
 
     }catch(err){
         console.log("Error"+err)

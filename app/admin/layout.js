@@ -1,10 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { Inter } from "next/font/google"
+import AdminHeader from "@/Component/AdminHeader";
 
-import "./globals.css";
 
-import Navbar from "@/component/Header";
-import Footer from "@/Component/Footer";
+// import "./globals.css";
+
 
 
 const inter =Inter({subsets:["latin"]})
@@ -12,12 +12,12 @@ const inter =Inter({subsets:["latin"]})
 
 export const metadata = {
 
-    title: "A Next.js App",
+    title: "A Next App",
 
     description: "A Artifact Greeks WEb",
 };
 
-export default function RootLayout({ children }) {
+export default function Layout({ children }) {
 
     return (
 
@@ -26,11 +26,11 @@ export default function RootLayout({ children }) {
             <body className={inter.className}>
 
 
-                {/* <Navbar/> */}
-                <main>
+           <AdminHeader/>
+              
                      {children}
-                </main>
-                {/* <Footer/> */}
+               
+               
 
                
 
